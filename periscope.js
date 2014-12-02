@@ -6,6 +6,8 @@ var _ = require('underscore');
 
 var marked = require('marked');
 var pygmentize = require('pygmentize-bundled');
+var through2 = require('through2');
+
 /*
 Synchronously parse a JSON-formatted TOC file. Expects the TOC in the format
 [
