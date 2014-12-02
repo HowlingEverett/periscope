@@ -1,3 +1,9 @@
+var path = require('path');
+var fs = require('fs');
+var util = require('util');
+
+var _ = require('underscore');
+
 var marked = require('marked');
 var pygmentize = require('pygmentize-bundled');
 /*
@@ -41,8 +47,24 @@ function filesFromToc (tocPath) {
   }
 }
 
+var DEFAULTS = {
+
+};
+
+function periscope (options) {
+  var opts, files;
+  
+  opts = _.extend({}, DEFAULTS, options);
+  if (!opts.files && !opts.toc) {
+    throw new Error('Pass opts.files or opts.toc to use Periscope.');
+  }
   if (opts.toc) {
     files = filesFromToc(opts.toc);
   } else {
     files = opts.files;
   }
+
+
+}
+
+module.exports = periscope;
