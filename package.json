@@ -1,0 +1,38 @@
+{
+  "name": "periscope",
+  "version": "0.1.0",
+  "description": "A static generator for single-page documentation sites.",
+  "main": "periscope.js",
+  "bin": {
+    "gulp": "./bin/periscope-cli.js"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HowlingEverett/periscope.git"
+  },
+  "keywords": [
+    "sitegenerator",
+    "javascript",
+    "nodejs",
+    "documentation"
+  ],
+  "author": "Justin Marrington (@howlingeverett)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HowlingEverett/periscope/issues"
+  },
+  "homepage": "https://github.com/HowlingEverett/periscope",
+  "dependencies": {
+    "marked": "^0.3.2",
+    "pygmentize-bundled": "^2.3.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-util": "^3.0.1",
+    "mocha": "^2.0.1",
+    "should": "^4.3.0"
+  }
+}
