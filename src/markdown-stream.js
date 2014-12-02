@@ -5,6 +5,14 @@ var fs = require('fs');
 var util = require('util');
 var _ = require('underscore');
 
+
+/*
+Wraps the Marked library into a naive Readable stream that can be injected into
+a pipeline, with some nice defaults. By default, enables Github-flavoured 
+Markdown and pygments-based syntax highlighting. 
+
+You can override the defaults by setting a key in the options object.
+*/
 var MarkdownStream = function(path, options) {
   Readable.call(this, {encoding: 'utf8'});
 
