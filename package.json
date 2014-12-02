@@ -32,6 +32,8 @@
     "underscore": "^1.7.0"
   },
   "devDependencies": {
+    "cheerio": "^0.18.0",
+    "concat-stream": "^1.4.7",
     "gulp": "^3.8.10",
     "gulp-util": "^3.0.1",
     "mocha": "^2.0.1",
