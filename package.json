@@ -27,12 +27,15 @@
   "homepage": "https://github.com/HowlingEverett/periscope",
   "dependencies": {
     "marked": "^0.3.2",
-    "pygmentize-bundled": "^2.3.0"
+    "pygmentize-bundled": "^2.3.0",
+    "through2": "^1.0.0",
+    "underscore": "^1.7.0"
   },
   "devDependencies": {
     "gulp": "^3.8.10",
     "gulp-util": "^3.0.1",
     "mocha": "^2.0.1",
-    "should": "^4.3.0"
+    "should": "^4.3.0",
+    "sinon": "^1.12.1"
   }
 }
