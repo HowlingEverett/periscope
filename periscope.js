@@ -4,9 +4,8 @@ var util = require('util');
 
 var _ = require('underscore');
 
-var marked = require('marked');
-var pygmentize = require('pygmentize-bundled');
 var through2 = require('through2');
+var StreamCombiner = require('./src/streamcombiner.js');
 
 /*
 Synchronously parse a JSON-formatted TOC file. Expects the TOC in the format
@@ -30,7 +29,7 @@ function filesFromToc (tocPath) {
   try {
     toc = fs.readFileSync(tocPath, {encoding: 'utf8'});
   } catch (error) {
-    throw new Error('Couldn\'t read TOC file.', error);
+    throw new Error('Couldn\'t read TOC file ' + tocPath);
   }
 
   try {
@@ -47,6 +46,14 @@ function filesFromToc (tocPath) {
     throw new Error('Table of contents must be valid JSON in the format' +
       '[{"title": "Section Title", "file": "./my/file/path"}, ...]');
   }
+}
+
+function createMarkdownStream (markdownPath) {
+  
+}
+
+function createHtmlStream (htmlPath) {
+  
 }
 
 var DEFAULTS = {
@@ -67,6 +74,8 @@ function periscope (options) {
   }
 
 
+
+  return through2();
 }
 
 module.exports = periscope;
