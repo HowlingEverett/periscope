@@ -7,7 +7,7 @@ Test paragraph.
 
 ## Test Heading 2
 
-```javascript
+```js
 function test() {
   console.log('Show me some syntax highlighting, baby!');
 }

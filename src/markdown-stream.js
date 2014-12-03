@@ -1,6 +1,6 @@
 var marked = require('marked');
 var pygmentize = require('pygmentize-bundled');
-var Readable = require('stream').Readable;
+var Transform = require('stream').Transform;
 var fs = require('fs');
 var util = require('util');
 var _ = require('underscore');
@@ -13,12 +13,12 @@ Markdown and pygments-based syntax highlighting.
 
 You can override the defaults by setting a key in the options object.
 */
-var MarkdownStream = function(path, options) {
-  Readable.call(this, {encoding: 'utf8'});
+var MarkdownStream = function(options) {
+  Transform.call(this, {encoding: 'utf8'});
 
   var self = this;
 
-  options = _.extend({
+  this.options = _.extend({
     gfm: true,
     pedantic: false,
     sanitize: true,
@@ -29,28 +29,60 @@ var MarkdownStream = function(path, options) {
     }
   }, options);
 
-  fs.readFile(path, 'utf8', this._encode.bind(this, options));
+  this._delimiterPattern = /\n\n|\n$/;
+  this._fragment = '';
 };
 
-util.inherits(MarkdownStream, Readable);
+util.inherits(MarkdownStream, Transform);
 
-MarkdownStream.prototype._read = function(n) {
-  // no-op
-};
+function chunkIsLine(chunk) {
+  return chunk.substr(-1) === '\n';
+}
 
-MarkdownStream.prototype._encode = function(options, err, text) {
+MarkdownStream.prototype._transform = function(chunk, encoding, callback) {
   var self = this;
+  var fragment = chunk.toString();
+  var text, parts;
 
-  if (err) {
-    return this.emit('error', err);
+  this._fragment += fragment;
+  if (this._fragment.match(this._delimiterPattern)) {
+    if (chunkIsLine(this._fragment)) {
+      text = this._fragment;
+      this._fragment = '';
+    } else {
+      parts = this._fragment.split(this._delimiterPattern);
+      this._fragment = parts.pop();
+      text = parts.join(this._delimiterPattern);
+    }
+
+    marked(text, this.options, function(err, result) {
+      if (err) {
+        this.emit('error', err);
+        return callback();
+      }
+      self.push(result, 'utf8');
+      callback();
+    });
+  } else {
+    callback();
   }
-  marked(text, options, function(err, result) {
-    self.push(result, 'utf8');
-    // Required to stream emits its end event
-    self.push(null);
-  });
 };
 
-module.exports = function(path, options) {
-  return new MarkdownStream(path, options);
+MarkdownStream.prototype._flush = function(callback) {
+  if (this._fragment.length > 0) {
+    marked(text, this.options, function(err, result) {
+      if (err) {
+        this.emit('error', err);
+        return callback();
+      }
+      self.push(result, 'utf8');
+      callback();
+    });
+  } else {
+    callback();
+  }
+};
+
+module.exports = function(options) {
+  return new MarkdownStream(options);
 };

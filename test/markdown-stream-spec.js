@@ -1,6 +1,7 @@
 var markdown = require('../src/markdown-stream.js');
 var concat = require('concat-stream');
 var cheerio = require('cheerio');
+var fs = require('fs');
 var path = require('path');
 
 describe('Markdown parsing readable stream', function () {
@@ -20,11 +21,12 @@ describe('Markdown parsing readable stream', function () {
       done();
     });
 
-    var markdownStream = markdown(path.join(__dirname, './resources/test.md'));
+    var inputStream = fs.createReadStream(path.join(__dirname, './resources/test.md'));
+    var markdownStream = markdown();
     markdownStream.on('error', function(error) {
       throw new Error(error);
     });
-    markdownStream.pipe(outStream);
+    inputStream.pipe(markdownStream).pipe(outStream);
   });
 
   it('should run code through pygments and generate highlighted output', function (done) {
@@ -34,29 +36,15 @@ describe('Markdown parsing readable stream', function () {
       var code = $('code');
       pre.length.should.be.greaterThan(0);
       code.length.should.equal(1);
-      code.hasClass('lang-javascript').should.be.true;
+      code.hasClass('lang-js').should.be.true;
       done();
     });
 
-    var markdownStream = markdown(path.join(__dirname, './resources/test.md'));
+    var inputStream = fs.createReadStream(path.join(__dirname, './resources/test.md'));
+    var markdownStream = markdown();
     markdownStream.on('error', function(error) {
       throw new Error(error);
     });
-    markdownStream.pipe(outStream);
-  });
-
-  it('should emit an error if a source file doesn\'t exist', function (done) {
-    var outStream = concat(function(html) {
-      done();
-    });
-
-    var markdownStream = markdown(path.join(__dirname, './resources/nothere.md'));
-    markdownStream.on('error', function(error) {
-      done();
-    });
-    markdownStream.on('end', function() {
-      throw new Error('Got to the end of the stream without emitting an error.');
-    });
-    markdownStream.pipe(outStream);
+    inputStream.pipe(markdownStream).pipe(outStream);
   });
 });
