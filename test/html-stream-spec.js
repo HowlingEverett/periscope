@@ -13,8 +13,9 @@ describe('Html stream transformer', function () {
       $('code span').length.should.equal(0);
 
       // The existing elements should exist in the output
-      $('h1').length.should.equal(1);
-      $('p').length.should.equal(1);
+      $('h1').length.should.equal(2);
+      $('h2').length.should.equal(2);
+      $('p').length.should.equal(4);
 
       done();
     });
