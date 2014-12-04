@@ -68,11 +68,11 @@ HtmlStream.prototype._transform = function(chunk, encoding, callback) {
     code = match.chunk.substring(startIndex, endIndex);
     pygmentize({lang: lang,  format: 'html'}, code, 
       function (err, highlighted) {
-        highlighted = highlighted.toString();
         if (err) {
           self.emit('error', err);
           return callback(err);
         }
+        highlighted = highlighted.toString();
         encoded += highlighted;
         self.push(encoded);
         callback();

@@ -59,4 +59,22 @@ describe('Html stream transformer', function () {
     });
     inStream.pipe(htmlStream).pipe(outStream);
   });
+
+  it('should emit a stream error for an invalid language', function (done) {
+    var gotError = false;
+    var outStream = concat(function(html) {
+      gotError.should.be.truthy;
+      done();
+    });
+
+    var inStream = fs.createReadStream(path.join(__dirname,
+      './resources/code-invalid-lang.html'));
+    var htmlStream = htmlCodify();
+    htmlStream.on('error', function(error) {
+      // If we got an error for this file, it's emitting the language-invalid error
+      error.message.should.containEql('no lexer for alias');
+      gotError = true;
+    });
+    inStream.pipe(htmlStream).pipe(outStream);
+  });
 });
