@@ -1,7 +1,6 @@
 var marked = require('marked');
 var pygmentize = require('pygmentize-bundled');
 var Transform = require('stream').Transform;
-var fs = require('fs');
 var util = require('util');
 var _ = require('underscore');
 
