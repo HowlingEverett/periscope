@@ -5,10 +5,6 @@ var fs = require('fs');
 var path = require('path');
 
 describe('Markdown parsing readable stream', function () {
-  it('should produce a readable stream', function () {
-
-  });
-
   it('should create a HTML fragment from input markdown', function (done) {
     var outStream = concat(function(html) {
       var $ = cheerio.load(html);
