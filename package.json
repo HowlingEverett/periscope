@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/HowlingEverett/periscope",
   "dependencies": {
+    "async": "^0.9.0",
     "marked": "^0.3.2",
     "pygmentize-bundled": "^2.3.0",
     "through2": "^1.0.0",
