@@ -16,8 +16,6 @@ You can override the defaults by setting a key in the options object.
 var MarkdownStream = function(options) {
   Transform.call(this, {encoding: 'utf8'});
 
-  var self = this;
-
   this.options = _.extend({
     gfm: true,
     pedantic: false,
