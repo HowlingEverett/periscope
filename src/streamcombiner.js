@@ -36,4 +36,7 @@ StreamCombiner.prototype.pipe = function(dest, options) {
   return this.transformStream.pipe(dest, options);
 };
 
-module.exports = StreamCombiner;
+module.exports = function () {
+  var args = Array.prototype.slice.call(arguments, 0);
+  return new StreamCombiner(args);
+};
