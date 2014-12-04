@@ -5,7 +5,11 @@ var util = require('util');
 var _ = require('underscore');
 
 var through2 = require('through2');
-var StreamCombiner = require('./src/streamcombiner.js');
+var markdown = require('./src/markdown-stream.js');
+var htmlCodify = require('./src/html-codify-stream.js');
+var idGen = require('./src/heading-id-generator-stream.js');
+var toc = require('./src/toc-generator-stream.js');
+var streamcombiner = require('./src/streamcombiner.js');
 
 /*
 Synchronously parse a JSON-formatted TOC file. Expects the TOC in the format
@@ -61,7 +65,7 @@ var DEFAULTS = {
 };
 
 function periscope (options) {
-  var opts, files;
+  var opts, files, streams;
   
   opts = _.extend({}, DEFAULTS, options);
   if (!opts.files && !opts.toc) {
@@ -73,9 +77,24 @@ function periscope (options) {
     files = opts.files;
   }
 
+  streams = [];
+  files.forEach(function (file) {
+    var parseStream, fileStream;
 
-
-  return through2();
+    fileStream = fs.createReadStream(path.resolve(file));
+    if (path.extname(file) === '.html') {
+      parseStream = htmlCodify();
+      
+    } else if (path.extname === '.md') {
+      parseStream = markdown();
+    }
+    fileStream.pipe(parseStream);
+  });
+  var combined = streamcombiner(streams);
+  streamcombiner
+    .pipe(idGen)
+    .pipe(toc)
+    .pipe(fs.createWriteStream(__dirname, 'docs.html'));
 }
 
 module.exports = periscope;
